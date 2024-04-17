@@ -17,6 +17,7 @@ extern const char *const enc_stat[];   /* defined in botl.c */
 
 #include "statuswin.h"
 #include "enhancebutton.h"
+#include "statusbars.h"
 #include "textwin.h"
 
 #include <sstream>
@@ -28,6 +29,7 @@ static Uint32 warn_colors[V_MAX_WARN];
 statuswin::statuswin(window *p) : window(p)
 {
 	window *subwin;
+	window *bars;
 	
 	statusbg = vulture_load_graphic(V_FILENAME_STATUS_BAR);
 	this->w = statusbg->w;
@@ -41,6 +43,11 @@ statuswin::statuswin(window *p) : window(p)
 	subwin->x = this->x + this->w;
 	subwin->y = this->y - subwin->h;
 	subwin->menu_id = V_WIN_ENHANCE;
+
+	bars = new statusbars(this->parent);
+	bars->w = this->w;
+	bars->x = this->x;
+	bars->y = this->y - bars->h-vulture_get_lineheight(V_FONT_STATUS);
 	
 	for (int i = 0; i < 5; i++)
 		for (int j = 0; j < 5; j++)
@@ -79,7 +86,6 @@ bool statuswin::draw()
 	vulture_set_draw_region(0, 0, vulture_screen->w-1, vulture_screen->h-1);
 
 	vulture_invalidate_region(abs_x, abs_y, w, h);
-	
 	return true;
 }
 
