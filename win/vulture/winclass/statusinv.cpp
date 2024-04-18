@@ -50,7 +50,7 @@ bool statusinv::draw()
 	vulture_put_img(abs_x, abs_y, statusbg);
 
 	this->draw_obj(uarmh, 0, 0);	  // Helmet
-	this->draw_obj(ublindf, 1, 0);	  // Blindfold
+	if (ublindf) this->draw_obj(ublindf, 1, 0);	  // Blindfold
 	this->draw_obj(uamul, 0, 1);	  // Amulet
 	this->draw_obj(uarm, 0, 2);		  // Armour
 
@@ -58,7 +58,7 @@ bool statusinv::draw()
 	this->draw_obj(uarms, 1.5, 1.5);  // Shield
 
 	this->draw_obj(uarmu, 0, 3); // Undershirt
-	this->draw_obj(uskin, -1, 3); // Dragon skin armor
+	if (uskin) this->draw_obj(uskin, -1, 3); // Dragon skin armor
 
 	this->draw_obj(uleft, -2, 3.5);  // RingL
 	this->draw_obj(uright, 2, 3.5); // RingR
@@ -70,8 +70,8 @@ bool statusinv::draw()
 	this->draw_obj(uquiver, 1, 5);	// Quiver
 
 	this->draw_obj(uarmf, 0, 7);  // Shoes (feet)
-	this->draw_obj(uchain, 1, 7);	// chain
-	this->draw_obj(uball, 2, 7);	// ball
+	if (uchain) this->draw_obj(uchain, 1, 7);	// chain
+	if (uball) this->draw_obj(uball, 2, 7);	// ball
 
 	vulture_set_draw_region(0, 0, vulture_screen->w - 1, vulture_screen->h - 1);
 
