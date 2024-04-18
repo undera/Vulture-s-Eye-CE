@@ -28,9 +28,11 @@ statusinv *stinv;
 
 statusinv::statusinv(window *p) : window(p)
 {
+	statusbg = vulture_load_graphic(V_FILENAME_LOADOUT);
+	this->w = statusbg->w;
+	this->h = statusbg->h;
+
 	tileSize = V_LISTITEM_HEIGHT + 2;
-	h = tileSize * 4;
-	w = tileSize * 4;
 
 	stinv = this;
 	autobg = true;
@@ -39,34 +41,37 @@ statusinv::statusinv(window *p) : window(p)
 
 statusinv::~statusinv()
 {
+	SDL_FreeSurface(statusbg);
 }
 
 bool statusinv::draw()
 {
 	vulture_set_draw_region(abs_x, abs_y, abs_x + w - 1, abs_y + h - 1);
+	vulture_put_img(abs_x, abs_y, statusbg);
 
-	this->draw_obj(uamul, 0, 0);	// Amulet
-	this->draw_obj(uarmh, 1, 0);  // Helmet
-	this->draw_obj(ublindf, 2, 0);	// Blindfold
-	this->draw_obj(uwep, 3, 0);		// Weapon
+	this->draw_obj(uarmh, 0, 0);	  // Helmet
+	this->draw_obj(ublindf, 1, 0);	  // Blindfold
+	this->draw_obj(uamul, 0, 1);	  // Amulet
+	this->draw_obj(uarm, 0, 2);		  // Armour
 
-	this->draw_obj(uarmc, 0, 1);  // Cloak
-	this->draw_obj(uarm, 1, 1);	  // Armour
-	this->draw_obj(uarmg, 2, 1);  // Gloves
-	this->draw_obj(uarms, 3, 1);  // Shield
+	this->draw_obj(uarmc, -1.5, 1.5); // Cloak
+	this->draw_obj(uarms, 1.5, 1.5);  // Shield
 
+	this->draw_obj(uarmu, 0, 3); // Undershirt
+	this->draw_obj(uskin, -1, 3); // Dragon skin armor
 
-	this->draw_obj(uleft, 0, 2);  // RingL
-	this->draw_obj(uarmu, 1, 2);  // Undershirt
-	this->draw_obj(uright, 2, 2); // RingR
-	this->draw_obj(uquiver, 3, 2);	// Quiver
+	this->draw_obj(uleft, -2, 3.5);  // RingL
+	this->draw_obj(uright, 2, 3.5); // RingR
 
-	this->draw_obj(uchain, 0, 3);	// chain
-	this->draw_obj(uarmf, 1, 3);  // Shoes (feet)
-	this->draw_obj(uball, 2, 3);	// ball
-	this->draw_obj(uswapwep, 3, 3); // Secondary weapon
+	this->draw_obj(uwep, 2.5, 4.5);		// Weapon
+	this->draw_obj(uswapwep, -2.5, 4.5); // Secondary weapon
 
-	// the only thing we skip is 		*uskin  // dragon armor, if a dragon
+	this->draw_obj(uarmg, -1, 5);  // Gloves
+	this->draw_obj(uquiver, 1, 5);	// Quiver
+
+	this->draw_obj(uarmf, 0, 7);  // Shoes (feet)
+	this->draw_obj(uchain, 1, 7);	// chain
+	this->draw_obj(uball, 2, 7);	// ball
 
 	vulture_set_draw_region(0, 0, vulture_screen->w - 1, vulture_screen->h - 1);
 
@@ -75,14 +80,14 @@ bool statusinv::draw()
 	return true;
 }
 
-void statusinv::draw_obj(obj *obj, int col, int row)
+void statusinv::draw_obj(obj *obj, float rx, float ry)
 {
 	// most code is copied from objitemwin.cpp
 	int cx, cy, cw, ch;
-	cx = x + col * (tileSize + 1);
-	cy = y + row * (tileSize + 1);
 	cw = tileSize;
 	ch = tileSize;
+	cx = x + w / 2 - tileSize / 2 + rx * (tileSize + 2) + 5;
+	cy = y + ry * (tileSize + 2) + 30;
 
 	char tmpstr[32];
 
@@ -92,7 +97,7 @@ void statusinv::draw_obj(obj *obj, int col, int row)
 	vulture_set_draw_region(cx, cy, cx + ch, cy + ch);
 
 	/* darken the background */
-	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, CLR32_BLACK_A30); 
+	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, CLR32_BLACK_A50);
 
 	if (obj)
 	{
@@ -132,7 +137,7 @@ void statusinv::draw_obj(obj *obj, int col, int row)
 	}
 
 	// outline
-	vulture_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, CLR32_GRAY70);
+	vulture_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, CLR32_GRAY77);
 
 	/* restore the drawing region */
 	vulture_set_draw_region(0, 0, vulture_screen->w - 1, vulture_screen->h - 1);

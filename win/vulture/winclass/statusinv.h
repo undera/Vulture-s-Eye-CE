@@ -5,6 +5,7 @@
 
 #include <SDL.h>
 #include "window.h"
+#define V_FILENAME_LOADOUT           "loadout"
 
 class statusinv : public window
 {
@@ -17,7 +18,8 @@ public:
 	virtual eventresult handle_resize_event(window *target, void *result, int res_w, int res_h);
 
 private:
-	void draw_obj(obj *obj, int col, int row);
+	void draw_obj(obj *obj, float x, float y);
+	SDL_Surface *statusbg;
 	int tileSize;
 };
 
