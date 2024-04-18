@@ -52,8 +52,6 @@ statuswin::statuswin(window *p) : window(p)
 	bars->y = this->y - bars->h-vulture_get_lineheight(V_FONT_STATUS);
 	
 	inv = new statusinv(this->parent);
-	inv->w = this->w;
-	inv->h = this->w;
 	inv->x = this->x;
 	inv->y = bars->y - inv->h - vulture_get_lineheight(V_FONT_STATUS);
 	

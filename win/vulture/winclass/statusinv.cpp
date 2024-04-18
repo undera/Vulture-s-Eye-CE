@@ -28,8 +28,9 @@ statusinv *stinv;
 
 statusinv::statusinv(window *p) : window(p)
 {
-	w = 100;
-	h = 100;
+	tileSize = V_LISTITEM_HEIGHT + 2;
+	h = tileSize * 4;
+	w = tileSize * 4;
 
 	stinv = this;
 	autobg = true;
@@ -42,7 +43,6 @@ statusinv::~statusinv()
 
 bool statusinv::draw()
 {
-	tileSize = w / 4 - 2;
 	vulture_set_draw_region(abs_x, abs_y, abs_x + w - 1, abs_y + h - 1);
 
 	this->draw_obj(uamul, 0, 0);	// Amulet
