@@ -53,10 +53,30 @@ bool statusbars::draw()
 		wSec = weight_cap() / (float)(inv_weight() + weight_cap());
 	}
 
+	float hMain, hSec;
+	hMain = 1;
+	if (u.uhunger > 1000)
+	{
+		hSec = 1000 / (float)u.uhunger;
+	}
+	else if (u.uhunger > 150)
+	{
+		hSec = 150 / (float)u.uhunger;
+	}
+	else if (u.uhunger > 50)
+	{
+		hSec = 50 / (float)u.uhunger;
+	}
+	else
+	{
+		hMain = u.uhunger / 50.0;
+		hSec = 0;
+	}
+
 	vulture_set_draw_region(abs_x, abs_y, abs_x + w - 1, abs_y + h - 1);
 	this->draw_bar(0, "HP", u.uhp / (float)u.uhpmax, 0, CLR32_RED);
 	this->draw_bar(1, "Magic", u.uen / (float)u.uenmax, 0, CLR32_BLESS_BLUE);
-	this->draw_bar(2, "Food", u.uhunger / (float)1000, 150 / float(1000), CLR32_GOLD_SHADE);
+	this->draw_bar(2, "Food", hMain, hSec, CLR32_GOLD_SHADE);
 	this->draw_bar(3, "Weight", wMain, wSec, CLR32_BROWN);
 	this->draw_bar(4, "XP", u.uexp / (float)newuexp(u.ulevel), 0, CLR32_LIGHTPINK);
 	vulture_set_draw_region(0, 0, vulture_screen->w - 1, vulture_screen->h - 1);
@@ -68,12 +88,17 @@ bool statusbars::draw()
 
 void statusbars::draw_bar(int i, std::string label, float lvlMain, float lvlSecondary, Uint32 color)
 {
+	if (lvlMain < 0)
+	{
+		lvlMain = 0;
+	}
+
 	int by = y + (barh + 5) * i;
 	vulture_fill_rect(x, by, x + w * lvlMain, by + barh, color);
 	vulture_put_text(V_FONT_TOOLTIP, label, vulture_screen, x + 1, by + 1, CLR32_WHITE);
 	if (lvlSecondary > 0)
 	{
-		vulture_fill_rect(x + w * lvlSecondary, by, x + w * lvlSecondary, by + barh, CLR32_YELLOW);
+		vulture_fill_rect(x + w * lvlSecondary, by, x + w * lvlSecondary, by + barh, CLR32_WHITE);
 	}
 	vulture_rect(x, by, x + w, by + barh, CLR32_GRAY70);
 }
