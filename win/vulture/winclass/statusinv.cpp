@@ -49,29 +49,33 @@ bool statusinv::draw()
 	vulture_set_draw_region(abs_x, abs_y, abs_x + w - 1, abs_y + h - 1);
 	vulture_put_img(abs_x, abs_y, statusbg);
 
-	this->draw_obj(uarmh, 0, 0);	  // Helmet
-	if (ublindf) this->draw_obj(ublindf, 1, 0);	  // Blindfold
-	this->draw_obj(uamul, 0, 1);	  // Amulet
-	this->draw_obj(uarm, 0, 2);		  // Armour
+	this->draw_obj(uarmh, 0, 0); // Helmet
+	if (ublindf)
+		this->draw_obj(ublindf, 1, 0); // Blindfold
+	this->draw_obj(uamul, 0, 1);	   // Amulet
+	this->draw_obj(uarm, 0, 2);		   // Armour
 
 	this->draw_obj(uarmc, -1.5, 1.5); // Cloak
 	this->draw_obj(uarms, 1.5, 1.5);  // Shield
 
 	this->draw_obj(uarmu, 0, 3); // Undershirt
-	if (uskin) this->draw_obj(uskin, -1, 3); // Dragon skin armor
+	if (uskin)
+		this->draw_obj(uskin, -1, 3); // Dragon skin armor
 
-	this->draw_obj(uleft, -2, 3.5);  // RingL
+	this->draw_obj(uleft, -2, 3.5); // RingL
 	this->draw_obj(uright, 2, 3.5); // RingR
 
-	this->draw_obj(uwep, 2.5, 4.5);		// Weapon
+	this->draw_obj(uwep, 2.5, 4.5);		 // Weapon
 	this->draw_obj(uswapwep, -2.5, 4.5); // Secondary weapon
 
 	this->draw_obj(uarmg, -1, 5);  // Gloves
-	this->draw_obj(uquiver, 1, 5);	// Quiver
+	this->draw_obj(uquiver, 1, 5); // Quiver
 
-	this->draw_obj(uarmf, 0, 7);  // Shoes (feet)
-	if (uchain) this->draw_obj(uchain, 1, 7);	// chain
-	if (uball) this->draw_obj(uball, 2, 7);	// ball
+	this->draw_obj(uarmf, 0, 7); // Shoes (feet)
+	if (uchain)
+		this->draw_obj(uchain, 1, 7); // chain
+	if (uball)
+		this->draw_obj(uball, 2, 7); // ball
 
 	vulture_set_draw_region(0, 0, vulture_screen->w - 1, vulture_screen->h - 1);
 
@@ -133,6 +137,17 @@ void statusinv::draw_obj(obj *obj, float rx, float ry)
 			int txt_height = vulture_text_height(V_FONT_MENU, tmpstr);
 			int text_start_x = cx + ch - vulture_text_length(V_FONT_MENU, tmpstr) - 2;
 			vulture_put_text_shadow(V_FONT_MENU, tmpstr, vulture_screen, text_start_x, cy + ch - txt_height, CLR32_WHITE, CLR32_BLACK);
+		}
+
+		// draw +- quality
+		if (is_weptool(obj) || obj->oclass == ARMOR_CLASS)
+		{
+			if (obj->known)
+			{			
+				snprintf(tmpstr, 11, (obj->spe < 0) ? "%d" : "+%d", obj->spe);
+				int text_start_x = cx + 2;
+				vulture_put_text_shadow(V_FONT_MENU, tmpstr, vulture_screen, text_start_x, cy + 2, CLR32_WHITE, CLR32_BLACK);
+			}
 		}
 	}
 
