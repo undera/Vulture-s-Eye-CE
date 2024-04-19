@@ -5,7 +5,7 @@
 
 #include "config.h"
 #include "global.h"
-
+#include <math.h>
 extern "C"
 {
 #ifndef VULTURE_NETHACK_3_6_7
@@ -88,7 +88,7 @@ bool statusbars::draw()
 
 void statusbars::draw_bar(int i, std::string label, float lvlMain, float lvlSecondary, Uint32 color)
 {
-	if (lvlMain < 0)
+	if (lvlMain < 0 || isinf(lvlMain))
 	{
 		lvlMain = 0;
 	}
