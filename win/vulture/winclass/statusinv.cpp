@@ -101,7 +101,7 @@ void statusinv::draw_obj(obj *obj, float rx, float ry)
 	vulture_set_draw_region(cx, cy, cx + ch, cy + ch);
 
 	/* darken the background */
-	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, CLR32_BLACK_A50);
+	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, obj == ublindf ? CLR32_GRAY20 : CLR32_BLACK_A50);
 
 	if (obj)
 	{
@@ -140,10 +140,10 @@ void statusinv::draw_obj(obj *obj, float rx, float ry)
 		}
 
 		// draw +- quality
-		if (is_weptool(obj) || obj->oclass == ARMOR_CLASS)
+		if (is_weptool(obj) || obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS)
 		{
 			if (obj->known)
-			{			
+			{
 				snprintf(tmpstr, 11, (obj->spe < 0) ? "%d" : "+%d", obj->spe);
 				int text_start_x = cx + 2;
 				vulture_put_text_shadow(V_FONT_MENU, tmpstr, vulture_screen, text_start_x, cy + 2, CLR32_WHITE, CLR32_BLACK);
