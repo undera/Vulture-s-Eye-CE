@@ -101,7 +101,7 @@ void statusinv::draw_obj(obj *obj, float rx, float ry)
 	vulture_set_draw_region(cx, cy, cx + ch, cy + ch);
 
 	/* darken the background */
-	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, obj == ublindf ? CLR32_GRAY20 : CLR32_BLACK_A50);
+	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, obj && obj == ublindf ? CLR32_GRAY20 : CLR32_BLACK_A50);
 
 	if (obj)
 	{
