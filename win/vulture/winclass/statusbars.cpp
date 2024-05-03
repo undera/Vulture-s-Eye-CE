@@ -74,8 +74,12 @@ bool statusbars::draw()
 	}
 
 	vulture_set_draw_region(abs_x, abs_y, abs_x + w - 1, abs_y + h - 1);
-	this->draw_bar(0, "HP", u.uhp / (float)u.uhpmax, 0, CLR32_RED);
-	this->draw_bar(1, "Magic", u.uen / (float)u.uenmax, 0, CLR32_BLESS_BLUE);
+	if (u.uhpmax>0) {
+		this->draw_bar(0, "HP", u.uhp / (float)u.uhpmax, 0, CLR32_RED);
+	}
+	if (u.uenmax>0) {
+		this->draw_bar(1, "Magic", u.uen / (float)u.uenmax, 0, CLR32_BLESS_BLUE);
+	}
 	this->draw_bar(2, "Food", hMain, hSec, CLR32_GOLD_SHADE);
 	this->draw_bar(3, "Weight", wMain, wSec, CLR32_BROWN);
 	this->draw_bar(4, "XP", u.uexp / (float)newuexp(u.ulevel), 0, CLR32_LIGHTPINK);
@@ -88,7 +92,7 @@ bool statusbars::draw()
 
 void statusbars::draw_bar(int i, std::string label, float lvlMain, float lvlSecondary, Uint32 color)
 {
-	if (lvlMain < 0 || isinf(lvlMain))
+	if (lvlMain < 0 || isinf(lvlMain) || std::isnan(lvlMain))
 	{
 		lvlMain = 0;
 	}
