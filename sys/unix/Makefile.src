@@ -307,7 +307,7 @@ WINOBJ = $(WINVULTUREOBJ)
 #WINTTYLIB = -ltermlib
 
 # SDL libraries for Vulture's Eye
-WINVULTURELIB = `$(SDL_CONFIG) --libs` $(SDLMAIN) -lSDL_mixer  -lSDL_ttf -lpng -lz -logg -lvorbis -ltheoradec -lpthread
+WINVULTURELIB = `$(SDL_CONFIG) --libs` $(SDLMAIN) -lSDL_mixer -lm -lSDL_ttf -lpng -lz -logg -lvorbis -ltheoradec -lpthread
 ifeq ($(OS),Darwin)
 	WINVULTURELIB += -lstdc++
 endif
