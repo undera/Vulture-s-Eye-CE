@@ -1,0 +1,7 @@
+Dockerfile
+.git
+.idea
+.vscode
+*.o
+.d
+*.d.*
