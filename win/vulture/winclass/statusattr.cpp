@@ -51,8 +51,8 @@ bool statusattr::draw()
 		strength,
 		consitution,
 		charisma,
-		wisdom,
 		intelligence,
+		wisdom,
 	};
 
 	char *dataLabels[MAX_AXES] = {
@@ -60,8 +60,8 @@ bool statusattr::draw()
 		"St",
 		"Co",
 		"Ch",
-		"Wi",
 		"In",
+		"Wi",
 	};
 
 	int centerX = this->x + this->w / 2;
@@ -83,8 +83,29 @@ bool statusattr::draw()
 		edgePoints[i][1] = centerY + radius * sin(angle);
 		dataPoints[i][0] = centerX + dataRadius * cos(angle);
 		dataPoints[i][1] = centerY + dataRadius * sin(angle);
-		labelPoints[i][0] = centerX + (radius + vulture_get_lineheight(V_FONT_SMALL)) * cos(angle);
-		labelPoints[i][1] = centerY + (radius + vulture_get_lineheight(V_FONT_SMALL) / 2) * sin(angle);
+
+		labelPoints[i][0] = (radius + vulture_get_lineheight(V_FONT_SMALL) / 2) * cos(angle);
+		char *lbl = dataLabels[i];
+		if (labelPoints[i][0] > centerX)
+		{
+			labelPoints[i][0] += vulture_text_length(V_FONT_SMALL, lbl) / 2;
+		}
+		else if (labelPoints[i][0] < centerX)
+		{
+			labelPoints[i][0] -= vulture_text_length(V_FONT_SMALL, lbl) / 2;
+		}
+		labelPoints[i][0] += centerX;
+
+		labelPoints[i][1] = (radius + vulture_get_lineheight(V_FONT_SMALL) / 2) * sin(angle);
+		if (labelPoints[i][1] > centerY)
+		{
+			labelPoints[i][1] += vulture_get_lineheight(V_FONT_SMALL) / 2;
+		}
+		else if (labelPoints[i][1] < centerY)
+		{
+			labelPoints[i][1] -= vulture_get_lineheight(V_FONT_SMALL) / 2;
+		}
+		labelPoints[i][1] += centerY;
 	}
 
 	// Drawing data
@@ -105,7 +126,7 @@ bool statusattr::draw()
 	for (int i = 0; i < MAX_AXES; ++i)
 	{
 		vulture_free_line(centerX, centerY, edgePoints[i][0], edgePoints[i][1], CLR32_GRAY70);
-		vulture_put_text(V_FONT_TOOLTIP, dataLabels[i], vulture_screen, labelPoints[i][0] - vulture_get_lineheight(V_FONT_SMALL), labelPoints[i][1] - vulture_get_lineheight(V_FONT_SMALL) / 2, CLR32_WHITE);
+		vulture_put_text(V_FONT_TOOLTIP, dataLabels[i], vulture_screen, labelPoints[i][0], labelPoints[i][1], CLR32_GRAY20);
 	}
 
 	// actual draw END
