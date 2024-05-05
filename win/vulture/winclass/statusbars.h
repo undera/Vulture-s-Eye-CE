@@ -19,7 +19,7 @@ public:
 	virtual eventresult handle_resize_event(window* target, void* result, int res_w, int res_h);
 
 private:
-	void draw_bar(int index, std::string label, float lvlMain, float lvlSecondary, Uint32 color);
+	void draw_bar(int index, std::string label, float lvlMain, float lvlSecondary, Uint32 color, std::string hint);
 };
 
 extern statusbars *stbars;

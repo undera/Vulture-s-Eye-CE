@@ -3,15 +3,15 @@
 #include "vulture_sdl.h" /* XXX this must be the first include,
                              no idea why but it won't compile otherwise */
 
+extern "C"
+{
+	extern const char *hu_stat[];		 /* defined in eat.c */
+	extern const char *const enc_stat[]; /* defined in botl.c */
+}
+
 #include "config.h"
 #include "global.h"
 #include <math.h>
-extern "C"
-{
-#ifndef VULTURE_NETHACK_3_6_7
-	boolean can_advance(int skill, int speedy);
-#endif
-}
 
 #include "vulture_win.h"
 #include "vulture_gra.h"
@@ -74,15 +74,18 @@ bool statusbars::draw()
 	}
 
 	vulture_set_draw_region(abs_x, abs_y, abs_x + w - 1, abs_y + h - 1);
-	if (u.uhpmax>0) {
-		this->draw_bar(0, "HP", u.uhp / (float)u.uhpmax, 0, CLR32_RED);
+	if (u.uhpmax > 0)
+	{
+		this->draw_bar(0, "HP", u.uhp / (float)u.uhpmax, 0, CLR32_RED, "");
 	}
-	if (u.uenmax>0) {
-		this->draw_bar(1, "Magic", u.uen / (float)u.uenmax, 0, CLR32_BLESS_BLUE);
+	if (u.uenmax > 0)
+	{
+		this->draw_bar(1, "Magic", u.uen / (float)u.uenmax, 0, CLR32_BLESS_BLUE, "");
 	}
-	this->draw_bar(2, "Food", hMain, hSec, CLR32_GOLD_SHADE);
-	this->draw_bar(3, "Weight", wMain, wSec, CLR32_BROWN);
-	this->draw_bar(4, "XP", u.uexp / (float)newuexp(u.ulevel), 0, CLR32_LIGHTPINK);
+	this->draw_bar(2, "Food", hMain, hSec, CLR32_GOLD_SHADE, hu_stat[u.uhs]);
+	int cap = near_capacity();
+	this->draw_bar(3, "Weight", wMain, wSec, CLR32_BROWN, enc_stat[cap]);
+	this->draw_bar(4, "XP", u.uexp / (float)newuexp(u.ulevel), 0, CLR32_LIGHTPINK, "");
 	vulture_set_draw_region(0, 0, vulture_screen->w - 1, vulture_screen->h - 1);
 
 	vulture_invalidate_region(abs_x, abs_y, w, h);
@@ -90,7 +93,7 @@ bool statusbars::draw()
 	return true;
 }
 
-void statusbars::draw_bar(int i, std::string label, float lvlMain, float lvlSecondary, Uint32 color)
+void statusbars::draw_bar(int i, std::string label, float lvlMain, float lvlSecondary, Uint32 color, std::string hint)
 {
 	if (lvlMain < 0 || isinf(lvlMain) || std::isnan(lvlMain))
 	{
@@ -99,11 +102,12 @@ void statusbars::draw_bar(int i, std::string label, float lvlMain, float lvlSeco
 
 	int by = y + (barh + 5) * i;
 	vulture_fill_rect(x, by, x + w * lvlMain, by + barh, color);
-	vulture_put_text(V_FONT_TOOLTIP, label, vulture_screen, x + 1, by + 1, CLR32_WHITE);
 	if (lvlSecondary > 0)
 	{
 		vulture_fill_rect(x + w * lvlSecondary, by, x + w * lvlSecondary, by + barh, CLR32_WHITE);
 	}
+	vulture_put_text(V_FONT_TOOLTIP, label, vulture_screen, x + 1, by + 1, CLR32_WHITE);
+	vulture_put_text(V_FONT_TOOLTIP, hint, vulture_screen, x + w - vulture_text_length(V_FONT_TOOLTIP, label) - 1, by + 1, CLR32_YELLOW);
 	vulture_rect(x, by, x + w, by + barh, CLR32_GRAY70);
 }
 
