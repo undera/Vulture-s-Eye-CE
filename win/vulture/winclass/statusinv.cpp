@@ -101,7 +101,7 @@ void statusinv::draw_obj(obj *obj, float rx, float ry)
 	vulture_set_draw_region(cx, cy, cx + ch, cy + ch);
 
 	/* darken the background */
-	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, obj && obj == ublindf ? CLR32_GRAY20 : CLR32_BLACK_A50);
+	vulture_fill_rect(cx + 2, cy + 2, cx + ch - 3, cy + ch - 3, obj && obj == ublindf ? CLR32_GRAY70 : CLR32_BLACK_A50);
 
 	if (obj)
 	{
@@ -174,6 +174,5 @@ eventresult statusinv::handle_resize_event(window *target, void *result, int res
 {
 	/* this relies on the fact that the enhance window is created
 	 * immediately after the status window */
-	y = sib_prev->y - h;
 	return V_EVENT_HANDLED_NOREDRAW;
 }

@@ -31,9 +31,6 @@ static Uint32 warn_colors[V_MAX_WARN];
 statuswin::statuswin(window *p) : window(p)
 {
 	window *subwin;
-	window *bars;
-	window *inv;
-	window *sattr;
 	
 	statusbg = vulture_load_graphic(V_FILENAME_STATUS_BAR);
 	this->w = statusbg->w;
@@ -50,20 +47,15 @@ statuswin::statuswin(window *p) : window(p)
 
 	bars = new statusbars(this->parent);
 	bars->w = this->w;
-	bars->x = this->x;
-	bars->y = this->y - bars->h - vulture_get_lineheight(V_FONT_STATUS);
-	
-	inv = new statusinv(this->parent);
-	inv->x = this->x;
-	inv->y = bars->y - inv->h - vulture_get_lineheight(V_FONT_STATUS);
 
-	int gap = vulture_get_lineheight(V_FONT_STATUS);
+	inv = new statusinv(this->parent);
+
 	sattr = new statusattr(this->parent);
-	sattr->x = this->x + this->w + gap;
-	sattr->y = bars->y;
-	int sattr_w = this->h + bars->h + gap;
+	int sattr_w = this->h * 2;
 	sattr->h = sattr_w;
 	sattr->w = sattr_w;
+
+	this->position();
 
 	for (int i = 0; i < 5; i++)
 		for (int j = 0; j < 5; j++)
@@ -88,6 +80,16 @@ statuswin::statuswin(window *p) : window(p)
 	warn_colors[V_WARN_CRITICAL] = CLR32_RED;
 }
 
+void statuswin::position() {
+	bars->x = vulture_screen->w / 2 - this->w / 2;
+	bars->y = vulture_screen->h - bars->h - vulture_get_lineheight(V_FONT_STATUS);
+
+	inv->x = this->x;
+	inv->y = this->y - inv->h - 1;
+
+	sattr->x = this->x + this->w + vulture_get_lineheight(V_FONT_STATUS);
+	sattr->y = vulture_screen->h - (sattr->h + 1);
+}
 
 statuswin::~statuswin()
 {
@@ -125,6 +127,7 @@ eventresult statuswin::handle_resize_event(window* target, void* result, int res
 {
 	/* x coordinate does not change */
 	y = parent->h - (h + 6);
+	position();
 	return V_EVENT_HANDLED_NOREDRAW;
 }
 

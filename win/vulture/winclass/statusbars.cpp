@@ -127,6 +127,5 @@ eventresult statusbars::handle_resize_event(window *target, void *result, int re
 {
 	/* this relies on the fact that the enhance window is created
 	 * immediately after the status window */
-	y = sib_prev->y - h;
 	return V_EVENT_HANDLED_NOREDRAW;
 }

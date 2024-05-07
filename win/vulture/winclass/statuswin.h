@@ -35,8 +35,12 @@ public:
 
 private:
 	void add_cond(std::string str, int warnno, int color);
+	void position();
 	SDL_Surface *statusbg;
 	textwin *tokenarray[5][5];
+	window *bars;
+	window *inv;
+	window *sattr;
 };
 
 extern statuswin *stwin;
